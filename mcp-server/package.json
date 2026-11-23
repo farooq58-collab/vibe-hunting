@@ -1,0 +1,33 @@
+{
+  "name": "vibe-hunter-mcp",
+  "version": "1.0.0",
+  "description": "Vibe Hunting MCP Server — Free Open Source B2B & B2C Lead Intelligence, Website Defect Auditing & AI Outreach for Claude, ChatGPT, Cursor, and AI Agents",
+  "main": "index.js",
+  "type": "module",
+  "bin": {
+    "vibe-hunter": "./index.js",
+    "vibe-hunter-mcp": "./index.js"
+  },
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "b2b-leads",
+    "lead-generation",
+    "sales-intelligence",
+    "cold-outreach",
+    "openstreetmap",
+    "claude",
+    "chatgpt",
+    "cursor"
+  ],
+  "author": "Vibe Hunting",
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.6.1",
+    "axios": "^1.7.7",
+    "cheerio": "^1.0.0"
+  }
+}

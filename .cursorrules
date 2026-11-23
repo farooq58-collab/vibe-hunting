@@ -1,0 +1,15 @@
+# Vibe Hunter Agent Rules for Cursor & AI Chat
+
+When the user mentions `@vibe-hunter`, trigger the Vibe Hunter autonomous lead intelligence and sales outreach workflow:
+
+1. **Autonomous Tool Selection**:
+   - Use the `vibe-hunter` MCP server tools (`search_leads`, `enrich_lead`, `generate_outreach`, `generate_gtm_strategy`, `list_supported_niches`).
+   - If the user asks for leads in a city or niche (e.g. `@vibe-hunter find 10 plumbers in Karachi with no website`), invoke `search_leads` with `city`, `niche`, and relevant filters (`missing_website_only: true`, `hot_only: true`).
+   - If the user provides a website URL or asks to audit a competitor/client, invoke `enrich_lead` to extract direct emails, phone numbers, WhatsApp links, and technical gaps (SSL, mobile optimization, online booking).
+   - If the user asks for outreach (cold email, WhatsApp, cold call script), invoke `generate_outreach` referencing verified prospect gaps.
+   - If the user asks for an agency proposal or GTM blueprint, invoke `generate_gtm_strategy`.
+
+2. **Output Format**:
+   - Present discovered leads in a clean Markdown table with: Business Name, Rating/Opportunity Fit, Direct Phone Number, Website Status, and Detected Pain Point.
+   - Provide ready-to-send outreach copy for top candidates.
+   - Summarize next actionable steps for closing deals.

@@ -1,0 +1,31 @@
+{
+  "name": "vibe-hunting",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Vibe Hunting — B2B Lead Intelligence & Outreach Generator",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "build:check": "node scripts/build-check.mjs",
+    "start": "next start",
+    "lint": "next lint",
+    "mcp": "node mcp-server/index.js"
+  },
+  "bin": {
+    "vibe-hunting-mcp": "./mcp-server/index.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.32.2",
+    "@supabase/supabase-js": "^2.45.4",
+    "axios": "^1.7.7",
+    "cheerio": "^1.0.0",
+    "next": "^14.2.35",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.47",
+    "tailwindcss": "^3.4.13"
+  }
+}
