@@ -32,6 +32,8 @@ const CLIENTS = [
         "<PATH_TO_REPO>/mcp-server/index.js"
       ],
       "env": {
+        "OVERPASS_API_URL": "https://your-overpass-instance.example.com/api/interpreter",
+        "NOMINATIM_API_URL": "https://your-nominatim-instance.example.com/search",
         "NOMINATIM_USER_AGENT": "VibeHunting-MCP/1.0 (contact@yourdomain.com)"
       }
     }
@@ -58,6 +60,8 @@ const CLIENTS = [
         "vibe-hunter-mcp"
       ],
       "env": {
+        "OVERPASS_API_URL": "https://your-overpass-instance.example.com/api/interpreter",
+        "NOMINATIM_API_URL": "https://your-nominatim-instance.example.com/search",
         "NOMINATIM_USER_AGENT": "VibeHunting-MCP/1.0 (contact@yourdomain.com)"
       }
     }

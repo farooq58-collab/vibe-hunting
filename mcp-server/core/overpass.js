@@ -5,6 +5,7 @@
 
 import fs from "fs";
 import path from "path";
+import { buildNominatimSearchUrl } from "./geocode.js";
 
 // Auto-load .env.local or .env if present
 try {
@@ -38,12 +39,13 @@ try {
 
 const USER_AGENT = process.env.NOMINATIM_USER_AGENT || "VibeHunting-MCP/1.0 (contact@vibehunting.com)";
 
-export const OVERPASS_ENDPOINTS = [
-  "https://overpass.private.coffee/api/interpreter",
-  "https://overpass-api.de/api/interpreter",
-  "https://lz4.overpass-api.de/api/interpreter",
-  "https://overpass.kumi.systems/api/interpreter",
-];
+export function getOverpassEndpoints() {
+  const raw = process.env.OVERPASS_API_URL || "";
+  return raw
+    .split(",")
+    .map((u) => u.trim())
+    .filter(Boolean);
+}
 
 const CATEGORY_KEYS = [
   "shop",
@@ -218,11 +220,18 @@ export function parseOverpassElements(elements, origin) {
 }
 
 export async function fetchOverpassLeads(osmTags, location, radiusMeters = 20000, limit = 50, customNicheLabel = null) {
+  const endpoints = getOverpassEndpoints();
+  if (endpoints.length === 0) {
+    throw new Error(
+      "OpenStreetMap Overpass API is not configured. Set OVERPASS_API_URL in your environment or .env.local to fetch leads."
+    );
+  }
+
   const query = buildOverpassQuery(osmTags, location.lat, location.lon, radiusMeters, limit);
   let leads = [];
 
-  // Tier 1: Fast concurrent racing of Overpass mirrors (5s max)
-  const mirrorPromises = OVERPASS_ENDPOINTS.map(async (endpoint) => {
+  // Tier 1: Fast concurrent racing of user-configured Overpass endpoints (5s max)
+  const mirrorPromises = endpoints.map(async (endpoint) => {
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), 5000);
     try {
@@ -347,7 +356,12 @@ Output pure JSON array only, no intro or explanation.`;
       ];
 
       for (const q of nominatimQueries) {
-        const nomUrl = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(q)}&format=json&limit=25&addressdetails=1`;
+        const nomUrl = buildNominatimSearchUrl({
+          q,
+          format: "json",
+          limit: "25",
+          addressdetails: "1",
+        });
         const controller = new AbortController();
         const timer = setTimeout(() => controller.abort(), 4000);
 

@@ -7,6 +7,7 @@ export const runtime = "nodejs";
 export async function GET() {
   return json({
     groq: Boolean(process.env.GROQ_API_KEY),
+    osm: Boolean(process.env.OVERPASS_API_URL && process.env.NOMINATIM_API_URL),
     supabase: Boolean(
       process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
     ),

@@ -159,6 +159,6 @@ Returns all pre-calibrated industry niches, their specific pain points, and oppo
 
 ## 🔒 Privacy & Open Data Policy
 
-* Vibe Hunting connects directly to OpenStreetMap Overpass and Nominatim APIs.
-* Nominatim User-Agent defaults to `VibeHunting-MCP/1.0 (contact@vibehunting.com)` to respect OpenStreetMap's usage policy.
-* Can be customized via the `NOMINATIM_USER_AGENT` environment variable.
+* Vibe Hunting does **not** bundle built-in OpenStreetMap API endpoints.
+* You must provide your own OpenStreetMap Overpass and Nominatim endpoints via `OVERPASS_API_URL` and `NOMINATIM_API_URL` environment variables in order to fetch leads.
+* Nominatim User-Agent defaults to `VibeHunting-MCP/1.0 (contact@vibehunting.com)` and can be customized via the `NOMINATIM_USER_AGENT` environment variable.

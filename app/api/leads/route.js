@@ -1,9 +1,9 @@
 import { json, fail, fetchWithTimeout, USER_AGENT } from "@/lib/server/http";
-import { geocodeCity, GeocodeError } from "@/lib/server/geocode";
+import { geocodeCity, GeocodeError, buildNominatimSearchUrl } from "@/lib/server/geocode";
 import { getNiche } from "@/lib/niches";
 import { resolveNicheTerm, customNicheObject } from "@/lib/customNiche";
 import {
-  OVERPASS_ENDPOINTS,
+  getOverpassEndpoints,
   buildOverpassQuery,
   buildCustomQuery,
   parseOverpassElements,
@@ -30,6 +30,14 @@ export async function GET(request) {
 
   if (!city || !city.trim()) {
     return fail("Enter a city first.");
+  }
+
+  const overpassEndpoints = getOverpassEndpoints();
+  if (overpassEndpoints.length === 0) {
+    return fail(
+      "OpenStreetMap API is not configured. Add your own OVERPASS_API_URL and NOMINATIM_API_URL to .env.local in order to fetch leads.",
+      400
+    );
   }
 
   let niche = getNiche(nicheId);
@@ -70,8 +78,8 @@ export async function GET(request) {
 
   let elements = null;
 
-  // Tier 1: Query Overpass mirrors with fast concurrent racing (5s max)
-  const overpassPromises = OVERPASS_ENDPOINTS.map((endpoint) =>
+  // Tier 1: Query user-configured Overpass endpoints with fast concurrent racing (5s max)
+  const overpassPromises = overpassEndpoints.map((endpoint) =>
     fetchWithTimeout(
       endpoint,
       {
@@ -202,7 +210,12 @@ Output pure JSON array only, no intro or explanation.`;
         ];
 
         for (const q of nominatimQueries) {
-          const nomUrl = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(q)}&format=json&limit=25&addressdetails=1`;
+          const nomUrl = buildNominatimSearchUrl({
+            q,
+            format: "json",
+            limit: "25",
+            addressdetails: "1",
+          });
           const nomRes = await fetchWithTimeout(
             nomUrl,
             { headers: { "User-Agent": USER_AGENT, Accept: "application/json" } },

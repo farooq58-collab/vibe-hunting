@@ -70,38 +70,36 @@ That's it! The application will load immediately.
 
 ## 🔑 API Keys & Configuration
 
-### Option A: Run in 100% Free Local Mode (Zero Setup!)
-**You do not need any API keys to start using Vibe Hunting.**
-If you run the app without setting any keys, Vibe Hunting automatically runs in **Local Mode**:
-- Lead search works 100% free using open geocoding.
-- Website auditing and defect detection work directly from your computer.
-- Saved leads are safely stored in your browser's `localStorage`.
+> **Important:** Vibe Hunting does **not** include built-in OpenStreetMap API endpoints. **You must add your own OpenStreetMap API endpoints (`OVERPASS_API_URL` and `NOMINATIM_API_URL`) in `.env.local` in order to fetch leads.**
 
----
+### Step 1: Create `.env.local`
+```bash
+cp .env.example .env.local
+```
 
-### Option B: Add Free API Keys (To Unlock AI Outreach)
-
-To generate AI cold outreach emails and GTM strategy documents:
-
-1. Create a copy of the example environment file:
-   ```bash
-   cp .env.example .env.local
-   ```
-2. Open `.env.local` in your code editor.
-3. Fill in the keys (all services have 100% free tiers):
+### Step 2: Add Your OpenStreetMap APIs (Required to Fetch Leads)
+Open `.env.local` in your code editor and add your own OpenStreetMap Overpass and Nominatim API endpoints:
 
 ```env
-# 1. AI Generation (Free 14,400 requests/day)
+# 1. OpenStreetMap APIs (REQUIRED to fetch leads)
+# Add your own Overpass API endpoint(s) and Nominatim geocoding API endpoint
+OVERPASS_API_URL=https://your-overpass-instance.example.com/api/interpreter
+NOMINATIM_API_URL=https://your-nominatim-instance.example.com/search
+NOMINATIM_CONTACT=your-email@example.com
+```
+
+### Step 3: Optional Free API Keys (AI Outreach & Cloud CRM)
+Without `GROQ_API_KEY` or Supabase, Vibe Hunting runs in **Local Mode** (saved leads are stored in your browser's `localStorage`, and website auditing runs locally). To unlock AI cold outreach emails and GTM strategy documents, add:
+
+```env
+# 2. AI Generation (Free 14,400 requests/day)
 # Get your free key at: https://console.groq.com/keys
 GROQ_API_KEY=your_groq_api_key_here
 
-# 2. Database & Cloud CRM (Optional — Free forever)
+# 3. Database & Cloud CRM (Optional — Free forever)
 # Get free project URL & anon key at: https://supabase.com
 NEXT_PUBLIC_SUPABASE_URL=
 NEXT_PUBLIC_SUPABASE_ANON_KEY=
-
-# 3. Your Contact Email for OpenStreetMap requests
-NOMINATIM_CONTACT=your-email@example.com
 ```
 
 #### How to get a free Groq API key:

@@ -1,7 +1,18 @@
 /**
  * OpenStreetMap Nominatim Geocoder
- * Free, no API key required.
+ * Requires user-provided NOMINATIM_API_URL environment variable.
  */
+
+export function buildNominatimSearchUrl(params) {
+  const base = (process.env.NOMINATIM_API_URL || "").trim().replace(/\/+$/, "");
+  if (!base) {
+    throw new Error(
+      "OpenStreetMap Nominatim API is not configured. Set NOMINATIM_API_URL in your environment or .env.local to fetch leads."
+    );
+  }
+  const endpoint = base.endsWith("/search") ? base : `${base}/search`;
+  return `${endpoint}?${new URLSearchParams(params)}`;
+}
 
 const USER_AGENT = process.env.NOMINATIM_USER_AGENT || "VibeHunting-MCP/1.0 (contact@vibehunting.com)";
 const cache = new Map();
@@ -26,9 +37,15 @@ export async function geocodeCity(query) {
     return cache.get(cacheKey);
   }
 
+  const url = buildNominatimSearchUrl({
+    format: "json",
+    q: clean,
+    limit: "1",
+    addressdetails: "1",
+  });
+
   await throttle();
 
-  const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(clean)}&limit=1&addressdetails=1`;
   const response = await fetch(url, {
     headers: { "User-Agent": USER_AGENT, Accept: "application/json" },
   });
